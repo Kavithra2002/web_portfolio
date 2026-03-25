@@ -1,19 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { AnimatedOnScroll } from "./ui/AnimatedOnScroll";
-
-const TECH_ITEMS = [
-  "React",
-  "TypeScript",
-  "Node.js",
-  "Tailwind CSS",
-  "Vite",
-  "PostgreSQL",
-  "REST APIs",
-  "Secure APIs",
-];
+import { SKILLS } from "../content/profile";
 
 export const TechRail: React.FC = () => {
   const railRef = useRef<HTMLDivElement>(null);
+  const items = [...SKILLS.primary, ...SKILLS.secondary].filter(Boolean);
 
   useEffect(() => {
     const rail = railRef.current;
@@ -33,17 +24,17 @@ export const TechRail: React.FC = () => {
   }, []);
 
   return (
-    <section className="tech-rail" id="tech" aria-label="Technology stack">
+    <section className="tech-rail" id="skills" aria-label="Skills">
       <div className="tech-rail__container">
         <AnimatedOnScroll>
           <div className="tech-rail-header">
-            <p className="tech-rail-eyebrow">Technology Stack</p>
-            <h2 className="tech-rail-title">Powered by Modern Technology</h2>
+            <p className="tech-rail-eyebrow">Skills</p>
+            <h2 className="tech-rail-title">Tools I Build With</h2>
           </div>
         </AnimatedOnScroll>
       </div>
       <div ref={railRef} className="tech-rail-track">
-        {[...TECH_ITEMS, ...TECH_ITEMS].map((t, i) => (
+        {[...items, ...items].map((t, i) => (
           <div key={`${t}-${i}`} className="tech-item">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
               <circle cx="8" cy="8" r="3" className="tech-item-dot" />

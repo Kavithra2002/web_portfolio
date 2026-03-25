@@ -1,21 +1,22 @@
 import React from "react";
-import logoImg from "../../../images/logo.png";
 
 const sections = [
   { id: "home", label: "Home" },
-  { id: "services", label: "Services" },
-  { id: "products", label: "Products" },
-  { id: "clients", label: "Clients" },
-  { id: "about", label: "About us" },
+  { id: "projects", label: "Projects" },
+  { id: "skills", label: "Skills" },
+  { id: "experience", label: "Experience" },
+  { id: "contact", label: "Contact" },
 ];
 
 /** Matches reffer code marketing-navigation.css: top 1.2rem, width 90%, max 1080px, padding ~0.65rem vertical */
 export const Header: React.FC<{
   onNavigateSection?: (id: string) => void;
-  onBookConsultation?: () => void;
+  onOpenCv?: () => void;
   /** "light" = always use white bar + dark nav (e.g. product detail on white background). Default uses dark bar over hero until scroll. */
   variant?: "default" | "light";
-}> = ({ onNavigateSection, onBookConsultation, variant = "default" }) => {
+  /** Force which nav item is active (useful for routed detail pages). */
+  activeSectionOverride?: string;
+}> = ({ onNavigateSection, onOpenCv, variant = "default", activeSectionOverride }) => {
   const [active, setActive] = React.useState<string>("home");
   const [mobileOpen, setMobileOpen] = React.useState(false);
   /** Past hero — matches reffer code Navigation.jsx (scrollY > innerHeight * 0.7) + marketing-navigation.css nav.scrolled */
@@ -23,6 +24,11 @@ export const Header: React.FC<{
   const lightBar = variant === "light" || scrolled;
 
   React.useEffect(() => {
+    if (activeSectionOverride) {
+      setActive(activeSectionOverride);
+      return;
+    }
+
     const updateScrolled = () => {
       setScrolled(window.scrollY > window.innerHeight * 0.7);
     };
@@ -49,7 +55,7 @@ export const Header: React.FC<{
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
     };
-  }, []);
+  }, [activeSectionOverride]);
 
   const handleNavClick = (id: string) => {
     setMobileOpen(false);
@@ -103,11 +109,24 @@ export const Header: React.FC<{
             ].join(" ")}
             aria-label="Go to home"
           >
-            <img
-              src={logoImg}
-              alt=""
-              className="h-7 w-auto max-w-[124px] object-contain object-left md:h-8 md:max-w-[132px]"
-            />
+            <span
+              className={[
+                "inline-flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold tracking-[0.22em]",
+                lightBar
+                  ? "bg-slate-900 text-white"
+                  : "bg-white/10 text-white ring-1 ring-white/20",
+              ].join(" ")}
+            >
+              K
+            </span>
+            <span
+              className={[
+                "ml-2 hidden text-sm font-semibold tracking-tight sm:inline",
+                lightBar ? "text-slate-900" : "text-white",
+              ].join(" ")}
+            >
+              R.A.Kavithra Methnula
+            </span>
           </button>
 
           <nav
@@ -127,19 +146,19 @@ export const Header: React.FC<{
           </nav>
 
           <div className="flex shrink-0 items-center gap-2 md:gap-3">
-            {onBookConsultation && (
+            {onOpenCv && (
               <button
                 type="button"
                 onClick={() => {
                   setMobileOpen(false);
-                  onBookConsultation();
+                  onOpenCv();
                 }}
                 className={[
                   "inline-flex h-8 shrink-0 items-center justify-center rounded-full border-0 bg-gradient-to-r from-[#79C72C] to-[#4c9141] px-3 text-[0.8rem] font-semibold text-white shadow-[0_3px_14px_rgba(121,199,44,0.35)] transition-[filter,transform,box-shadow] hover:brightness-105 hover:shadow-[0_6px_20px_rgba(121,199,44,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 active:scale-[0.98] md:h-9 md:px-5 md:text-sm",
                   lightBar ? "focus-visible:ring-offset-white" : "focus-visible:ring-offset-slate-950",
                 ].join(" ")}
               >
-                Book Consultation
+                View CV
               </button>
             )}
 

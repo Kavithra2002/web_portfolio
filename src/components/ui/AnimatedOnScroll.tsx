@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 function elementIntersectsViewport(el: HTMLElement): boolean {
   const rect = el.getBoundingClientRect();
@@ -18,7 +19,18 @@ type AnimatedOnScrollProps = {
   /** Minimum fraction of element visible to trigger (0-1). Default 0.15. */
   threshold?: number;
   className?: string;
+  /**
+   * Trigger the same scroll reveal animation for every block on load (e.g. after Learn more), without
+   * waiting for scroll. Still uses opacity/transform transitions + stagger delays.
+   */
+  revealImmediately?: boolean;
 };
+
+/** Location state set by Learn more links; read once per mount for detail pages. */
+export function useRevealAnimationsFromNavigation(): boolean {
+  const { state } = useLocation();
+  return Boolean((state as { revealAnimations?: boolean } | null)?.revealAnimations);
+}
 
 export const AnimatedOnScroll: React.FC<AnimatedOnScrollProps> = ({
   children,
@@ -28,20 +40,39 @@ export const AnimatedOnScroll: React.FC<AnimatedOnScrollProps> = ({
   rootMargin = "0px 0px -80px 0px",
   threshold = 0.15,
   className = "",
+  revealImmediately = false,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  /** Above-the-fold: reveal before first paint so content never stays blank. */
+  /**
+   * revealImmediately: keep initial hidden state for one paint, then show so CSS transitions run
+   * (same as scroll reveal). Stagger comes from transitionDelay on the visible class.
+   */
   useLayoutEffect(() => {
+    if (revealImmediately) {
+      let cancelled = false;
+      let raf2 = 0;
+      const raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => {
+          if (!cancelled) setIsVisible(true);
+        });
+      });
+      return () => {
+        cancelled = true;
+        cancelAnimationFrame(raf1);
+        if (raf2) cancelAnimationFrame(raf2);
+      };
+    }
     const el = ref.current;
     if (!el) return;
     if (elementIntersectsViewport(el)) {
       setIsVisible(true);
     }
-  }, []);
+  }, [revealImmediately]);
 
   useEffect(() => {
+    if (revealImmediately) return;
     const el = ref.current;
     if (!el) return;
 
@@ -59,7 +90,7 @@ export const AnimatedOnScroll: React.FC<AnimatedOnScrollProps> = ({
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [rootMargin, threshold]);
+  }, [revealImmediately, rootMargin, threshold]);
 
   const delayMs = staggerIndex * staggerMs;
   const style: React.CSSProperties = {

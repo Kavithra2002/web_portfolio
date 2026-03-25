@@ -10,7 +10,14 @@ type AnimatedOnScrollProps = {
     /** Minimum fraction of element visible to trigger (0-1). Default 0.15. */
     threshold?: number;
     className?: string;
+    /**
+     * Trigger the same scroll reveal animation for every block on load (e.g. after Learn more), without
+     * waiting for scroll. Still uses opacity/transform transitions + stagger delays.
+     */
+    revealImmediately?: boolean;
 };
+/** Location state set by Learn more links; read once per mount for detail pages. */
+export declare function useRevealAnimationsFromNavigation(): boolean;
 export declare const AnimatedOnScroll: React.FC<AnimatedOnScrollProps>;
 export {};
 //# sourceMappingURL=AnimatedOnScroll.d.ts.map
