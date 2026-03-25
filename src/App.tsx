@@ -12,6 +12,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "./components/ui/dialog";
+import { CvPdfPreview } from "./components/CvPdfPreview";
 import { EXPERIENCE, PROFILE, SKILLS } from "./content/profile";
 
 const CV_URL = "/cv.pdf";
@@ -170,8 +171,8 @@ export const App: React.FC = () => {
                   </Button>
 
                   <Dialog open={isCvOpen} onOpenChange={setIsCvOpen}>
-                    <DialogContent className="!w-[92vw] !max-w-[92vw] sm:!w-[50vw] sm:!max-w-[50vw] p-0 overflow-hidden">
-                      <div className="flex flex-col gap-4 border-b border-slate-200 bg-white px-5 py-4 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+                    <DialogContent className="!flex !max-h-[90dvh] !w-[92vw] !max-w-[92vw] flex-col overflow-hidden p-0 sm:!w-[50vw] sm:!max-w-[50vw]">
+                      <div className="flex shrink-0 flex-col gap-4 border-b border-slate-200 bg-white px-5 py-4 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
                         <div className="min-w-0 flex-1">
                           <DialogTitle>Curriculum Vitae</DialogTitle>
                           <DialogDescription>Preview and download.</DialogDescription>
@@ -193,17 +194,7 @@ export const App: React.FC = () => {
                           </Button>
                         </div>
                       </div>
-                      <div className="bg-slate-50">
-                        <object data={CV_URL} type="application/pdf" className="h-[75vh] w-full">
-                          <div className="p-6 text-sm text-slate-700">
-                            CV preview isn’t supported in this browser.{" "}
-                            <a className="underline" href={CV_URL} target="_blank" rel="noreferrer">
-                              Open the PDF
-                            </a>
-                            .
-                          </div>
-                        </object>
-                      </div>
+                      <CvPdfPreview cvUrl={CV_URL} />
                     </DialogContent>
                   </Dialog>
                 </div>
