@@ -125,7 +125,7 @@ export const Header: React.FC<{
                 lightBar ? "text-slate-900" : "text-white",
               ].join(" ")}
             >
-              R.A.Kavithra Methnula
+              R.A.Kavithra Rupasinghe
             </span>
           </button>
 
