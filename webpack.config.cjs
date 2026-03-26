@@ -122,7 +122,7 @@ function makeConfig({ mode, isProd }) {
         patterns: [
           {
             // Source lives in the repo root next to webpack.config.cjs (not the parent folder).
-            from: path.resolve(__dirname, "CV-Kavithra (1).pdf.pdf"),
+            from: path.resolve(__dirname, "updated_cv_Kavithra.pdf"),
             to: path.resolve(__dirname, "dist/cv.pdf"),
             noErrorOnMissing: false,
           },
