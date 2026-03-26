@@ -21,7 +21,7 @@ export type Experience = {
 };
 
 export const PROFILE = {
-  name: "R. A. Kavithra Methnula",
+  name: "R. A. Kavithra Rupasinghe",
   headline: "Software Engineer",
   location: "Sri Lanka ",
   summary:
